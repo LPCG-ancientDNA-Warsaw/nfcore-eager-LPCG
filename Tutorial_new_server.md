@@ -9,8 +9,10 @@ Flavia Leotta
 
 You should have received an e-mail on your institutional e-mail, after
 you supervisor has requested an account for you. In this e-mail you will
-find the following information: login: your_account_name pass:
-one_time_link_for_your_password gid: group_name (important later)
+find the following information: 
+login: your_account_name 
+pass: one_time_link_for_your_password 
+gid: group_name.
 
 Log-in in the new server by running the following command and
 substituting ‘login’ with your user name:
@@ -112,3 +114,4 @@ command:
 
 The `-r` flag is necessary to transfer directories and their files:
 remove it if you wish to simply transfer files.
+
