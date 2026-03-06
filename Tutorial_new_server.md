@@ -78,7 +78,7 @@ gets killed because one of the temporary files (nfcore-eager-2.5.1.sif)
 is too big. To solve it, it is enough to download this file locally: as
 a group, we don’t need many copies of the same file, so at the moment it
 is available in my folder for anyone to use. The directory is:
-`fleotta/singularity_images/nfcore-eager-2.5.1.sif`. If the directory
+`fleotta/common_files/singularity_images/nfcore-eager-2.5.1.sif`. If the directory
 changes, I will update this tutorial with the correct one.
 
 Nevertheless, if you still wish to download this file, it requires to
@@ -114,4 +114,5 @@ command:
 
 The `-r` flag is necessary to transfer directories and their files:
 remove it if you wish to simply transfer files.
+
 
