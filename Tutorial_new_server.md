@@ -2,6 +2,8 @@ Tutorial for the new server
 ================
 Flavia Leotta
 2026-03-04
+================
+LAST EDIT: 26th May 2026
 
 # Tutorial on how to download the pipeline nf-core/eager and transfer your files in the new server
 
@@ -78,7 +80,7 @@ gets killed because one of the temporary files (nfcore-eager-2.5.1.sif)
 is too big. To solve it, it is enough to download this file locally: as
 a group, we don’t need many copies of the same file, so at the moment it
 is available in my folder for anyone to use. The directory is:
-`fleotta/common_files/singularity_images/nfcore-eager-2.5.1.sif`. If the directory
+`/mnt/workspace03/gr7001/share/singularity_images/nfcore-eager-2.5.1.sif`. If the directory
 changes, I will update this tutorial with the correct one.
 
 Nevertheless, if you still wish to download this file, it requires to
