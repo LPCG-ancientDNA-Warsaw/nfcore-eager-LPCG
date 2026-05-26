@@ -2,6 +2,8 @@ Tutorial on how to run nf-core/eager pipeline as a SLURM job
 ================
 Flavia Leotta
 2026-04-13
+================
+Last update: 26th May 2026
 
 - [0. Location of the script](#0-location-of-the-script)
 - [1. Usage](#1-usage)
@@ -32,7 +34,7 @@ options to the common script (f.leotta@cent.uw.edu.pl).
 
 The location of this script is the following:
 
-    /home/users/fleotta/common_files/scripts/slurm_eager.sh
+    /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh
 
 As part of the same group in the server, you have execution permissions,
 but not editing.
@@ -42,7 +44,7 @@ but not editing.
 The script can be run as a SLURM job as usual, by specifying the
 parameters using the appropriate flags:
 
-    sbatch /home/users/fleotta/common_files/scripts/slurm_eager.sh -i input [OPTIONS]
+    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh -i input [OPTIONS]
 
 Only one parameter (the input) is strictly mandatory, while the rest
 have default values.
@@ -55,7 +57,7 @@ Options supported, in alphabetical order:
   a bwa index file, which has to be in accordance with the fasta
   reference file provided. Important: this must be simply the path to
   the directory, not the file itself. \[DEFAULT:
-  /home/users/fleotta/common_files/references/ (index built on Human
+  /mnt/workspace03/gr7001/share/references/ (index built on Human
   Reference Genome hs37d5)\];
 - `-i, --input` (mandatory): Input .tsv file with samples information,
   built following [nf-core/eager
@@ -71,7 +73,7 @@ Options supported, in alphabetical order:
   \[DEFAULT: ./results (created if not present in the current
   directory)\];
 - `-r, --reference` (optional): fasta file with reference genome.
-  \[DEFAULT: /home/users/fleotta/common_files/references/hs37d5.fa
+  \[DEFAULT: /mnt/workspace03/gr7001/share/references/hs37d5.fa
   (Human)\];
 - `-s, --singularity` (optional): Singularity version. \[DEFAULT:
   2.5.1\].
@@ -85,17 +87,17 @@ same flag, but their usage is slightly different.
 When using the short version of the flag, the script expects a space
 between the flag and the argument. Example:
 
-    sbatch /home/users/fleotta/common_files/scripts/slurm_eager.sh -i input.tsv
+    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh -i input.tsv
 
 Instead, when using the long version of the flag, the script expects
 only a “=” between them, with no space, and with the argument written
 between quoatation marks (“). Example:
 
-    sbatch /home/users/fleotta/common_files/scripts/slurm_eager.sh --input="input.tsv"
+    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh --input="input.tsv"
 
 This is important, as writing:
 
-    sbatch /home/users/fleotta/common_files/scripts/slurm_eager.sh --input input.tsv
+    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh --input input.tsv
 
 will result in an error.
 
