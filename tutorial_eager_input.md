@@ -1,23 +1,22 @@
-- [ **Generate nf-core/eager input files using LPCG custom scripts** ](#-generate-nf-coreeager-input-files-using-lpcg-custom-scripts-)
-  - [Introduction](#introduction)
-    - [ What are nf-core/eager inputs and ouputs? ](#-what-are-nf-coreeager-inputs-and-ouputs-)
-  - [The four scripts](#the-four-scripts)
-    - [  1. create\_tsv\_run.py ](#--1-create_tsv_runpy-)
-    - [  2. create\_tsv\_indiv.py ](#--2-create_tsv_indivpy-)
-    - [  Optional step: Fixing the files paths with `fix_paths.sh` ](#--optional-step-fixing-the-files-paths-with-fix_pathssh-)
-    - [  3. launch\_eager\_per\_run.sh ](#--3-launch_eager_per_runsh-)
-    - [  4. launch\_eager\_merged\_individuals.sh ](#--4-launch_eager_merged_individualssh-)
-  - [Additional files](#additional-files)
-    - [ Configuration: `conf/lpcg_lib_params.yaml` ](#-configuration-conflpcg_lib_paramsyaml-)
-    - [ SLURM script: `slurm_eager_profiles.sh` ](#-slurm-script-slurm_eager_profilessh-)
-    - [ Configuration: `conf/lpcg_warsaw.config` and `conf/lpcg_human.config` ](#-configuration-conflpcg_warsawconfig-and-conflpcg_humanconfig-)
-
 # <span style="color:#326273"> **Generate nf-core/eager input files using LPCG custom scripts** </span>
 
 Flavia Leotta
 
 Last updated: 25/06/2026
 
+## Table of Contents
+- [Introduction](#introduction)
+  - [ What are nf-core/eager inputs and ouputs? ](#-what-are-nf-coreeager-inputs-and-ouputs-)
+- [The four scripts](#the-four-scripts)
+  - [  1. create\_tsv\_run.py ](#--1-create_tsv_runpy-)
+  - [  2. create\_tsv\_indiv.py ](#--2-create_tsv_indivpy-)
+  - [  Optional step: Fixing the files paths with `fix_paths.sh` ](#--optional-step-fixing-the-files-paths-with-fix_pathssh-)
+  - [  3. launch\_eager\_per\_run.sh ](#--3-launch_eager_per_runsh-)
+  - [  4. launch\_eager\_merged\_individuals.sh ](#--4-launch_eager_merged_individualssh-)
+- [Additional files](#additional-files)
+  - [ Configuration: `conf/lpcg_lib_params.yaml` ](#-configuration-conflpcg_lib_paramsyaml-)
+  - [ SLURM script: `slurm_eager_profiles.sh` ](#-slurm-script-slurm_eager_profilessh-)
+  - [ Configuration: `conf/lpcg_warsaw.config` and `conf/lpcg_human.config` ](#-configuration-conflpcg_warsawconfig-and-conflpcg_humanconfig-)
 
 ##  Introduction 
 
