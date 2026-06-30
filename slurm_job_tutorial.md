@@ -1,9 +1,9 @@
-Tutorial on how to run nf-core/eager pipeline as a SLURM job
+Tutorial on how to run nf-core/eager pipeline as a SLURM job, with custom LPCG profiles
 ================
 Flavia Leotta
-2026-04-13
+2026-06-30
 ================
-Last update: 26th May 2026
+Last update: 30th june 2026
 
 - [0. Location of the script](#0-location-of-the-script)
 - [1. Usage](#1-usage)
@@ -21,20 +21,16 @@ Last update: 26th May 2026
 ## 0. Location of the script
 
 This tutorial’s goal is to help navigating the script file I have
-prepared to run the nf-core/eager pipeline as a SLURM job. The script is
+prepared to run the nf-core/eager pipeline as a SLURM jobusing a .tsv input file. The script is
 not supposed to be edited, but accepts some parameters which let the
-user personalize the input, reference genome used, and more. At the
-moment the pipeline executes the standard steps as provided by
-nf-core/eager documentation, with the addition of Sex Determination and
-Contamination Estimation: we expect to add more parameters with time and
-allow the user to personalize the run even more. If you have any
+user personalize the input, reference genome used, and more. The pipeline executes the standard steps as provided by
+nf-core/eager documentation: additional steps have to be accounted for using configuration files. If you have any
 specific request please feel free to either copy the script in your own
-home directory and edit it to fit your needs, or contact me to add these
-options to the common script (f.leotta@cent.uw.edu.pl).
+home directory and edit it to fit your needs, or contact me to create a personalised configuration files for you (f.leotta@cent.uw.edu.pl).
 
 The location of this script is the following:
 
-    /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh
+    /mnt/workspace03/gr7001/share/scripts/slurm_eager_profiles .sh
 
 As part of the same group in the server, you have execution permissions,
 but not editing.
@@ -44,44 +40,36 @@ but not editing.
 The script can be run as a SLURM job as usual, by specifying the
 parameters using the appropriate flags:
 
-    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager.sh -i input [OPTIONS]
+    sbatch /mnt/workspace03/gr7001/share/scripts/slurm_eager_profiles.sh -i input [OPTIONS]
 
 Only one parameter (the input) is strictly mandatory, while the rest
-have default values.
+have default values. This script is also used recursively by other scripts for batch analyses, as described [here](https://github.com/LPCG-ancientDNA-Warsaw/nfcore-eager-LPCG/blob/3bf1990d29ae57b1b05b885f8e5bde80769295cd/tutorial_eager_input.md).
 
 ### a. Supported flags
 
 Options supported, in alphabetical order:
 
-- `-b, --bwa_index` (optional): **Path to the directory** that contains
-  a bwa index file, which has to be in accordance with the fasta
-  reference file provided. Important: this must be simply the path to
-  the directory, not the file itself. \[DEFAULT:
-  /mnt/workspace03/gr7001/share/references/ (index built on Human
-  Reference Genome hs37d5)\];
+- `-c, --config` (optional): configuration/profile name \[DEFAULT: lpcg_human\]. These refer to the names of the configuration files available at `/mnt/workspace03/gr7001/share/conf/`;
 - `-i, --input` (mandatory): Input .tsv file with samples information,
   built following [nf-core/eager
-  documentation](https://nf-co.re/eager/2.3.3/docs/usage/#tsv-input-method);
+  documentation](https://nf-co.re/eager/2.3.3/docs/usage/#tsv-input-method) or using custom scripts as described [here](https://github.com/LPCG-ancientDNA-Warsaw/nfcore-eager-LPCG/blob/3bf1990d29ae57b1b05b885f8e5bde80769295cd/tutorial_eager_input.md);
 - `-n, --nextflow` (optional): Name of the installed Nextflow version
   (with DSL1). Important: installing the last version of Nextflow will
   not work, as it is incompatible with nf-core/eager pipeline. A
   tutorial on how to install the correct version is available in our
-  [Community
+  [Institutional
   Github](https://github.com/LPCG-ancientDNA-Warsaw/nfcore-eager-LPCG/blob/main/Tutorial_new_server.md)
   \[DEFAULT: nextflow_dsl1\];
 - `-o, --outdir` (optional): Directory where to store the results.
   \[DEFAULT: ./results (created if not present in the current
   directory)\];
-- `-r, --reference` (optional): fasta file with reference genome.
-  \[DEFAULT: /mnt/workspace03/gr7001/share/references/hs37d5.fa
-  (Human)\];
 - `-s, --singularity` (optional): Singularity version. \[DEFAULT:
   2.5.1\].
 
 ### b. Difference between short and long flags
 
 Each flag can be used in two different ways: there’s the short version
-(ex: -i) and the long version (ex: –input). They are both read as the
+(ex: -i) and the long version (ex: –-input). They are both read as the
 same flag, but their usage is slightly different.
 
 When using the short version of the flag, the script expects a space
