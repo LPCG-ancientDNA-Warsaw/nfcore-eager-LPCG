@@ -54,6 +54,7 @@ When running nf-core/eager on one library, it is possible to provide the path to
     
   - `--data`: `.csv` file that contains Lane information. The file must contain a row that starts with "[Data]" to be recognised. If none is provided, the script looks for it in the same folder as `--dir` and, next, in the parent folder of `--dir`.
   - `--dir`: directory where `.fastq` files are stored. Default: current working directory.
+  - `-o, --outdir`: directory where the output `.tsv` file will be stored. Default: current working directory.
 
 **Configuration options**:
   - `-c, --config`: path to `.yaml` file with projects parameters. Default: [`/mnt/workspace03/gr7001/share/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml).
