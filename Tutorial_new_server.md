@@ -117,6 +117,9 @@ command:
 The `-r` flag is necessary to transfer directories and their files:
 remove it if you wish to simply transfer files.
 
-To transfer files back to pier23 (regardless of whether you connect through the internal or external network), run this command:
+## 5. Transferring your files back to the old server
+If you need to transfer files back to pier23 (regardless of whether you connect through the internal or external network), run this command:
 
     scp -r ./<testfolder> <your_username_in_new_anthill_server>@so.cent.uw.edu.pl:<target_directory_fullpath>
+
+Mind that the "scp" command copies, not moves, the files so after use you have duplicated files one of which should be deleted, unless necessary.
