@@ -118,4 +118,5 @@ The `-r` flag is necessary to transfer directories and their files:
 remove it if you wish to simply transfer files.
 
 To transfer files back to pier23 (regardless of whether you connect through the internal or external network), run this command:
-scp -r ./<testfolder> <your_username_in_new_anthill_server>@so.cent.uw.edu.pl:<target_directory_fullpath>
+
+    scp -r ./<testfolder> <your_username_in_new_anthill_server>@so.cent.uw.edu.pl:<target_directory_fullpath>
