@@ -1,9 +1,8 @@
 Tutorial on how to run nf-core/eager pipeline as a SLURM job, with custom LPCG profiles
 ================
 Flavia Leotta
-2026-06-30
 ================
-Last update: 30th june 2026
+Last update: 30th september 2026
 
 - [0. Location of the script](#0-location-of-the-script)
 - [1. Usage](#1-usage)
