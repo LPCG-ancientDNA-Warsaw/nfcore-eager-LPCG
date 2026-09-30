@@ -1,27 +1,8 @@
-Tutorial for the new server
+Set up eager on the new server
 ================
-Flavia Leotta
-2026-03-04
-================
-LAST EDIT: 26th May 2026
+LAST EDIT: 30th September 2026
 
-# Tutorial on how to download the pipeline nf-core/eager and transfer your files in the new server
-
-### Requisites: have an account on the new server \[anthill\]\[ver0.4\]
-
-You should have received an e-mail on your institutional e-mail, after
-you supervisor has requested an account for you. In this e-mail you will
-find the following information: 
-login: your_account_name 
-pass: one_time_link_for_your_password 
-gid: group_name.
-
-Log-in in the new server by running the following command and
-substituting ‘login’ with your user name:
-
-    ssh login@sih-17.cent.uw.edu.pl
-
-There proceed to change your password with command `passwd`.
+# Tutorial on how to download, configure and the pipeline nf-core/eager
 
 ## 1. Download and install Nextflow
 
@@ -104,22 +85,3 @@ the following command:
     nextflow_dsl1 run nf-core/eager -profile test,singularity -r 2.5.1 --outdir <test_folder> -with-singularity $HOME/singularity_images/nfcore-eager-2.5.1.sif
 
 Note: This pipeline doesn’t work on sessions with less than 2 CPUs.
-
-## 4. Transfer your files from the old server
-
-If everything worked fine, you can test the pipeline on your own data.
-To transfer your data from your folder in the old server (IP:
-pier23.cent1.uw.edu.pl), log on IP pier23.cent1.uw.edu.pl and run this
-command:
-
-    scp -r ./<testfolder> <your_username_in_new_anthill_server>@sih-17.cent.uw.edu.pl:/home/users/<target_directory>
-
-The `-r` flag is necessary to transfer directories and their files:
-remove it if you wish to simply transfer files.
-
-## 5. Transferring your files back to the old server
-If you need to transfer files back to pier23 (regardless of whether you connect through the internal or external network), run this command:
-
-    scp -r ./<testfolder> <your_username_in_new_anthill_server>@so.cent.uw.edu.pl:<target_directory_fullpath>
-
-Mind that the "scp" command copies, not moves, the files so after use you have duplicated files one of which should be deleted, unless necessary.
