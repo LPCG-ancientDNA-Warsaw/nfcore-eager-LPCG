@@ -13,10 +13,10 @@ Last update: 30th june 2026
 - [2. Check your analysis status.](#2-check-your-analysis-status)
 - [3. Check your analysis’ progress.](#3-check-your-analysis-progress)
 - [4. Possible causes of errors.](#4-possible-causes-of-errors)
-  - [a. Job killed by SLURM.](#a-job-killed-by-slurm)
+  - [a. Specific processes running too long.](#a-specific-processes-running-too-long)
   - [b. Problems with inputs](#b-problems-with-inputs)
-  - [c. Singularity failing at creating a .sif
-    image](#c-singularity-failing-at-creating-a-sif-image)
+  - [c. Singularity failing at creating a sif image](#c-singularity-failing-at-creating-a-sif-image)
+
 
 ## 0. Location of the script
 
@@ -128,15 +128,11 @@ directory where the analysis was started, you can:
 
 ## 4. Possible causes of errors.
 
-### a. Job killed by SLURM.
+### a. Specific processes running too long
+I have recently encountered some problems about mapping (bwa aln) and damage profiling (damage profiler) running incredibly slow for some samples that have a similar number and quality of reads to samples that complete the pipeline in under a day. Please try to identify the problem lies in one of these two categories:
 
-By default, the PARTITION is set to “Short”, as this type of analysis
-should not take more than a couple of hours: if you encounter occasional
-problems with analysis killed before they are finished, please make a
-local copy of this script and change, in the header,
-`#SBATCH --partition=short` to `#SBATCH --partition=long`. If it is a
-recurring problem, please contact me for the possibility of creating a
-personalized script for you and your group.
+- if the job is consistently scheduled on the same node and runs consistently slow, it might be an hardware problem. Please schedule the job excluding the affected node, using `sbatch <script> --exclude=node<number>`, and notify me of the issue. Nodes that have recently encountered problems are node142 (damageProfiler) and node147 (bwa aln);
+- if the job fails after being scheduled to different nodes, please check if it is a specific step which is taking too long: if it is a recurring problem, contact me for the possibility of creating a personalized configuration file for you and your group. More often than not this can be solved by simply allowing specific processes to run longer or use more resources.
 
 ### b. Problems with inputs
 
@@ -149,7 +145,7 @@ provided. The rest of the parameters can be skipped, but if they are
 provided in a format that differs from the instructions provided in
 section 1b, it will cause an error.
 
-### c. Singularity failing at creating a .sif image
+### c. Singularity failing at creating a sif image
 
 If another version of Singularity is provided, the pipeline will
 struggle with downloading the `.sif` image associated with it: this is a
