@@ -1,4 +1,4 @@
-# <span style="color:#326273"> **Generate nf-core/eager input files using LPCG custom scripts** </span>
+# <span style="color:#326273"> **Run nf-core/eager from entire sequencing runs using LPCG custom scripts** </span>
 
 Flavia Leotta
 
@@ -30,9 +30,9 @@ To summarise, nf-core/eager is a pipeline created specifically for aDNA analysis
 
 The location of these scripts is the following:
 
-    /mnt/workspace03/gr7001/share/scripts/slurm_eager_profiles .sh
+    /mnt/workspace03/gr7001/share/scripts/
 
-As part of the same group in the server, you have execution permissions, but not editing.
+hereafter referenced as `<path_to_shared_folder>/`. As part of the same group in the server, you have execution permissions, but not editing.
 
 ##  The four scripts 
 
@@ -52,7 +52,7 @@ When running nf-core/eager on one library, it is possible to provide the path to
 
   Usage:
     
-    create_tsv_run.py [additional flags]
+    <path_to_shared_folder>/create_tsv_run.py [additional flags]
 
   Output:
     
@@ -65,8 +65,8 @@ When running nf-core/eager on one library, it is possible to provide the path to
   - `-o, --outdir`: directory where the output `.tsv` file will be stored. Default: current working directory.
 
 **Configuration options**:
-  - `-c, --config`: path to `.yaml` file with projects parameters. Default: [`/mnt/workspace03/gr7001/share/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml).
-  - `-p, --project`: Project name(s). When providing more than one, separate them with a space. Extracts the parameters associated with the matching project(s) in the [`/mnt/workspace03/gr7001/share/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml) configuration file and, if Sample_Project column in the **\-\-data** `.csv` file is found, select the subset of samples belonging to the selected project(s). Default: "global".
+  - `-c, --config`: path to `.yaml` file with projects parameters. Default: [`<path_to_shared_folder>/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml).
+  - `-p, --project`: Project name(s). When providing more than one, separate them with a space. Extracts the parameters associated with the matching project(s) in the [`<path_to_shared_folder>/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml) configuration file and, if Sample_Project column in the **\-\-data** `.csv` file is found, select the subset of samples belonging to the selected project(s). Default: "global".
   - `-r, --run`: run name. Used to: 1) correct the Library ID by adding the run name at the end (this ensures that a Library sequenced more than once produces two unique outputs), 2) if provided, it will be the FolderName[^foldername] in the output `.tsv` file name.
 
 **Script functionality options**:
@@ -76,7 +76,7 @@ When running nf-core/eager on one library, it is possible to provide the path to
 
 **nf-core/eager input options**: 
   
-  These last flags are some of the information that an input `.tsv` file for nf-core/eager should include. This information is usually extracted from the configuration file [`/mnt/workspace03/gr7001/share/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml), but those values can be overridden using these flags.
+  These last flags are some of the information that an input `.tsv` file for nf-core/eager should include. This information is usually extracted from the configuration file [`<path_to_shared_folder>/conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml), but those values can be overridden using these flags.
     
   - `--chemistry`: Illumina sequencer colour chemistry number.
   - `--seqtype`: paired end or single end data.
@@ -131,7 +131,7 @@ Only the input file is required, the rest of the information is extracted from t
 
   Usage:
 
-    create_tsv_indiv.py --input <tsv_input_file> [additional flags]
+    <path_to_shared_folder>/create_tsv_indiv.py --input <tsv_input_file> [additional flags]
 
   Output:
 
@@ -164,7 +164,7 @@ In the case that `.fastq` files are moved from a folder to another (for example,
 
   Usage:
 
-    fix_path.sh -o <old_path> -n <new_path> [-p file_pattern]
+    <path_to_shared_folder>/fix_path.sh -o <old_path> -n <new_path> [-p file_pattern]
 
   Output:
 
@@ -190,7 +190,7 @@ Now that all input files and directories are ready, we can launch nf-core/eager 
 
   Usage:
 
-    sbatch launch_eager_per_run.sh -i <tsv_input_file> [additional flags]
+    sbatch <path_to_shared_folder>/launch_eager_per_run.sh -i <tsv_input_file> [additional flags]
 
   Output:
 
@@ -236,7 +236,7 @@ The last step will allow the user to merge the libraries by Sample Name: the ide
 
   Usage:
 
-    sbatch launch_eager_merged_individuals.sh -i <input> [additional flags]
+    sbatch <path_to_shared_folder>/launch_eager_merged_individuals.sh -i <input> [additional flags]
 
   Output:
 
@@ -250,11 +250,11 @@ The last step will allow the user to merge the libraries by Sample Name: the ide
     - TEXT FILE: If you want to limit the analysis to a **subset of Samples**, you can provide:
       - a **tsv** file, namely `eager_input_(ProjectName)_(FolderName).tsv`. The script extracts the project name from the filename and searches for the corresponding Sample directories in:
   
-        `/mnt/workspace03/gr7001/share/eager_outputs/{project}/`
+        `<path_to_shared_folder>/eager_outputs/{project}/`
         
         If the project directory cannot be determined, it falls back to:
         
-        `/mnt/workspace03/gr7001/share/eager_outputs/global/`
+        `<path_to_shared_folder>/eager_outputs/global/`
       - a **csv** or **txt** file containing one Sample Name per line (no paths required). In this case, the script assumes that either:
         - the file is located in the same directory as the Sample folders, or
         - the script is executed from that directory. 
@@ -280,7 +280,7 @@ The last step will allow the user to merge the libraries by Sample Name: the ide
 I have prepared some additional files. These are not editable but I can modify them to better accomodate your analyses' needs. With the assumption that the shared folder is available at path `/mnt/workspace03/gr7001/share/`:
 
 1. Configuration file [`conf/lpcg_lib_params.yaml`](#configuration-conflpcg_lib_params.yaml)
-2. SLURM script [`slurm_eager_profiles.sh`](#-slurm-script-slurm_eager_profilessh-)
+2. SLURM script [`scripts/slurm_eager_profiles.sh`](#-slurm-script-slurm_eager_profilessh-)
 3. Configuration files [`conf/lpcg_warsaw.config` and `conf/lpcg_human.config`](#-configuration-conflpcg_warsawconfig-and-conflpcg_humanconfig-)
 
 ### <span style="color:#5C9EAD"> Configuration: `conf/lpcg_lib_params.yaml` </span>
@@ -338,7 +338,7 @@ These files are created when a job is scheduled and updated when an eager run st
 ```
 - **Fail**: the schema is [DATE] [SLURM_JOB_ID] [FAILED] - Job exited with code <error_code>. Reason: <error_line_from_.nextflow.log>. | Outdir: <path>. Example:
 ```
-[2026-09-24 23:09:42] [JOB: 531255] [FAILED] - Job exited with code 1. Reason: Sep-24 23:09:37.873 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 28; name: markduplicates (MZC04B1L1_NV000SE); status: COMPLETED; exit: 0; error: -; workDir: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04_merged/work/6d/5cf078a7e877de7f03a54326d83491] | Outdir: /mnt/workspace03/gr7001/share//eager_outputs/humanmiiz/MZC04/MZC04_merged
+[2026-09-24 23:09:42] [JOB: 531255] [FAILED] - Job exited with code 1. Reason: Sep-24 23:09:37.873 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 28; name: markduplicates (MZC04B1L1_NV000SE); status: COMPLETED; exit: 0; error: -; workDir: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04_merged/work/6d/5cf078a7e877de7f03a54326d83491] | Outdir: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04_merged
 ```
 
 When a completed run doesn't find any more scheduled jobs under the same username, it prints a success message "[ALL_JOBS_COMPLETED] All scheduled pipeline runs for this batch have finished.". This feature is waiting for an edit, as it flags completed runs as "incompleted" if other jobs under the same username are currently running (even if they are completely unrelated to eager).
