@@ -26,6 +26,14 @@ This tutorial refers to a set of four scripts available on the shared folder of 
 
 To summarise, nf-core/eager is a pipeline created specifically for aDNA analysis that takes either `.fastq` or `.bam` files as inputs and produces a set of different, and customizable, outputs including reports on endogenous DNA percentage, damage estimation, contamination calculation, sex determination and more!
 
+### <span style="color:#5C9EAD"> What are these scripts located? </span>
+
+The location of these scripts is the following:
+
+    /mnt/workspace03/gr7001/share/scripts/slurm_eager_profiles .sh
+
+As part of the same group in the server, you have execution permissions, but not editing.
+
 ##  The four scripts 
 
 The scripts I have prepared are intendend to be run in the following order:
@@ -182,12 +190,13 @@ Now that all input files and directories are ready, we can launch nf-core/eager 
 
   Usage:
 
-    launch_eager_per_run.sh -i <tsv_input_file> [additional flags]
+    sbatch launch_eager_per_run.sh -i <tsv_input_file> [additional flags]
 
   Output:
 
-    - all nf-core/eager outputs...
-    - ...but the most important is each library's `LibraryID_mapped.bam` file
+    - all nf-core/eager output...
+    - ...but the most important is each library's `LibraryID_mapped.bam` file,
+    - a .log file in <path_to_shared_folder>/eager_ouputs/logs.
 
 **Input/Output files**:
     
@@ -199,8 +208,11 @@ Now that all input files and directories are ready, we can launch nf-core/eager 
   - `-s`: path to the SLURM script to launch one instance of nf-core/eager. Default: [`slurm_eager_profiles.sh`](#-slurm-script-slurm_eager_profilessh-).
   - `-r`: sequencing run ID used to substitute the Illumina suffix "_SXXX" with the run ID, ensuring that the same library sequenced twice will produce two distinct outputs. Again, this flag is an artefact and it is not necessary if this correction was already performed in the previous steps.
   - `-c`: Configuration file for nf-core/eager. The available configuration files are in the shared folder `conf/`. Default: temporarly, is [`lpcg_human`](#-configuration-conflpcg_warsawconfig-and-conflpcg_humanconfig-).
+  - `-n`: Node list of nodes to esclude, separated by a comma (ex. node143,node144).
   
-This script will schedule one SLURM job for each `.tsv` file, using the SLURM script provided with the `-s` flag: it does not notify the user if a job started nor if it has failed, so it is advisable to regularly check the scheduled jobs queue (command `squeue`). From experience, if the job starts and finishes in less than 12-14 seconds, there was a problem with the input file, so make sure to check the hidden `.nextflow.log` files for more information.
+This script will schedule one SLURM job for each `.tsv` file, using the SLURM script provided with the `-s` flag: it does not notify the user if a job started nor if it has failed, so it is advisable to regularly check the scheduled jobs queue (command `squeue`) or to check the generated log file in <path_to_shared_folder>/eager_ouputs/logs/<date_project>.log. From experience, if the job starts and finishes in less than 12-14 seconds, there was a problem with the input file, so make sure to check the hidden `.nextflow.log` files for more information.
+
+It is good manners, if you want to analyze more than a couple of libraries, to exclude at least 3-4 nodes, as to not overcrowd the server and allow other users to work: remember that this script will schedule one job for each library, and requests 8CPUs for each. Our server has many nodes with 16 or even 24 CPUs (meaning that on the same node can be analyzed 2-3 libraries), but the space is not unlimited. Be mindful!
 
 > #### <span style="color:#E39774">Shameless self-promo</span>
 >
@@ -224,11 +236,12 @@ The last step will allow the user to merge the libraries by Sample Name: the ide
 
   Usage:
 
-    launch_eager_merged_individuals.sh -i <input> [additional flags]
+    sbatch launch_eager_merged_individuals.sh -i <input> [additional flags]
 
   Output:
 
-    - complete nf-core/eager outputs for each Sample
+    - complete nf-core/eager outputs for each Sample,
+    - a .log file in <path_to_shared_folder>/eager_ouputs/logs/<date_project>_merged.log.
 
 **Input/Output files**:
     
@@ -260,6 +273,7 @@ The last step will allow the user to merge the libraries by Sample Name: the ide
 
 - `-s`: path to the SLURM script to launch one instance of nf-core/eager. Default: [`slurm_eager_profiles.sh`](#-slurm-script-slurm_eager_profilessh-).
 - `-c`: Configuration file for nf-core/eager. The available configuration files are in the shared folder `conf/`. Default: temporarly, is [`lpcg_human`](#-configuration-conflpcg_warsawconfig-and-conflpcg_humanconfig-).
+- `-n`: Node list of nodes to esclude, separated by a comma (ex. node143,node144).
 
 ## Additional files
 
@@ -289,18 +303,45 @@ Additionally, the human project presents a udg_regex to be able to extract the U
 
 ### <span style="color:#5C9EAD"> SLURM script: `slurm_eager_profiles.sh` </span>
 
-This script allows the user to run nf-core/eager for a single `.tsv` file: in the context of this tutorial, no additional details are needed, since it is internally ran and flags are passed through the other scripts. A description of its flags and functionalities is available on our [Institutional Github](https://github.com/LPCG-ancientDNA-Warsaw/nfcore-eager-LPCG/blob/29c02be20fb59bea58c685706938f3c103c39795/slurm_job_tutorial.md).
+This script allows the user to run nf-core/eager for a single `.tsv` file: in the context of this tutorial, no additional details are needed, since it is internally ran and flags are passed through the other scripts. A description of its flags and functionalities is available on our [Institutional Github](https://github.com/LPCG-ancientDNA-Warsaw/nfcore-eager-LPCG/blob/29c02be20fb59bea58c685706938f3c103c39795/slurm_job_tutorial.md). Moreover, in the same tutorial, you will find additional information on how to check the analysis' progress and possible source of errors.
 
 ### <span style="color:#5C9EAD"> Configuration: `conf/lpcg_warsaw.config` and `conf/lpcg_human.config` </span>
 
-At the moment, there are only two available configuration settings (sometimes called profiles[^profile] in my scripts): the laboratory-specific nf-core/eager configuration file (`conf/lpcg_warsaw.config`) and a human-analysis specific one (`conf/lpcg_human.config`). The latter expands the parameters set in the Laboratory configuration with specific human-related reference genome, bwa index, and more information. Currently, the Laboratory use of nf-core/eager is limited to human analysis, thus the profile "lpcg_human" is the default behaviour, but once nf-core/eager will be used by more researchers, we expect to change these settings to:
+At the moment, there are only two available configuration settings (sometimes called profiles[^profile] in my scripts): the laboratory-specific nf-core/eager configuration file (`conf/lpcg_warsaw.config`) and a human-analysis specific one (`conf/lpcg_human.config`). The latter expands the parameters set in the Laboratory configuration with specific human-related reference genome, bwa index, and more information about sex determination and contamination. Currently, the Laboratory use of nf-core/eager is limited to human analysis, thus the profile "lpcg_human" is the default behaviour, but once nf-core/eager will be used by more researchers, we expect to change these settings to:
 
 - make "lpcg_warsaw" the default setting;
-- create new profiles for each type of analysis, potentially one for each specific species studied, or researcher.
+- create new profiles for each type of analysis, potentially one for each specific species studied, or project.
 
 The **Laboratory** configuration settings personalise the number of CPUs used for medium-size multi-core processes (specifically mapping with bwa) and the memory allocated to the process "damageprofiler", which has previously created some problems.
 
-The **human** configuration setting inherits the previous parameters, but also enables the sex determination, nuclear contamination estimation and genotyping steps, which are disabled in the default nf-core/eager pipeline. Moreover, it also provides the path to the human reference genome, the path to its bwa index (in `references/`) and the path to the 1240K SNPs panel (in `genotyping/`).
+The **human** configuration setting inherits the previous parameters, but also enables the sex determination, contamination estimation and genotyping steps, which are disabled in the default nf-core/eager pipeline. Moreover, it also provides the path to the human reference genome, the path to its bwa index (in `references/`) and the path to the 1240K SNPs panel (in `genotyping/`).
+
+### <span style="color:#5C9EAD"> Log files: `eager_outputs/logs/<date_project>.log` and `eager_outputs/logs/<date_project>_merged.log` </span>
+
+These files are created when a job is scheduled and updated when an eager run starts and finishes successfully or fails. Examples:
+
+- **Library submitted**: the schema is [DATE] [SLURM_JOB_ID] [SUBMITTED_LIBRARY] Individual: ID | Sample: Library ID | Config: (if available) name. Example:
+```
+[2026-09-21 12:28:02] [JOB: 530334] [SUBMITTED_LIBRARY] Individual: MZC03 | Sample: MZC03A1L1_NV000SE | Config: lpcg_human
+```
+- **Merged individual submitted**: the schema is [DATE] [SLURM_JOB_ID] [SUBMITTED_MERGED] Individual: ID | Config: (if available) name | Directory: <path>. Example:
+```
+[2026-09-24 22:54:29] [JOB: 531254] [SUBMITTED_MERGED] Individual: MZC03 | Config: lpcg_human | Directory: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC03/MZC03_merged
+```
+- **Library or merged individual started**: the schema is [DATE] [SLURM_JOB_ID] [SCHEDULED/STARTED] - Pipeline execution started for Input: <input_tsv_file> | Outdir: <path_where_you_can_find_the_.nextflow.log_file>. Example:
+```
+[2026-09-21 12:28:04] [JOB: 530338] [SCHEDULED/STARTED] - Pipeline execution started for Input: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04A1L1_NV000SE.tsv | Outdir: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04A1L1_NV000SE
+```
+- **Success**: the schema is [DATE] [SLURM_JOB_ID] [SUCCESS] - nf-core/eager completed successfully. MultiQC generated in: <path>. Example:
+```
+[2026-09-21 21:13:55] [JOB: 530337] [SUCCESS] - nf-core/eager completed successfully. MultiQC generated in /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC03/MZC03B2L1_NV000SE/multiqc/
+```
+- **Fail**: the schema is [DATE] [SLURM_JOB_ID] [FAILED] - Job exited with code <error_code>. Reason: <error_line_from_.nextflow.log>. | Outdir: <path>. Example:
+```
+[2026-09-24 23:09:42] [JOB: 531255] [FAILED] - Job exited with code 1. Reason: Sep-24 23:09:37.873 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 28; name: markduplicates (MZC04B1L1_NV000SE); status: COMPLETED; exit: 0; error: -; workDir: /mnt/workspace03/gr7001/share/eager_outputs/humanmiiz/MZC04/MZC04_merged/work/6d/5cf078a7e877de7f03a54326d83491] | Outdir: /mnt/workspace03/gr7001/share//eager_outputs/humanmiiz/MZC04/MZC04_merged
+```
+
+When a completed run doesn't find any more scheduled jobs under the same username, it prints a success message "[ALL_JOBS_COMPLETED] All scheduled pipeline runs for this batch have finished.". This feature is waiting for an edit, as it flags completed runs as "incompleted" if other jobs under the same username are currently running (even if they are completely unrelated to eager).
 
 [^project]: A **project** is the name of the research project to which each sample is associated to. It is one of the column names in the `SampleSheet.csv` file that accompanies each sequencing run.
 [^regex]: A **Regex**  string is a sequence of characters that defines a search pattern, used to match, search, or manipulate text based on specific criteria (https://en.wikipedia.org/wiki/Regular_expression).
